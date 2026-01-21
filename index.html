@@ -85,9 +85,7 @@ const form = document.getElementById('anmeldeForm');
 const submitBtn = document.getElementById('submitBtn');
 const messageDiv = document.getElementById('message');
 
-const SEATABLE_API_URL = 'https://cloud.seatable.io/api/v2.1/dtables/070b5738-b3fd-4306-a72c-065134dd6fae/rows/';
-const SEATABLE_API_TOKEN = 'e419c687281a272dc77d8467a4d11b4db24eb9bf';
-const TABLE_NAME = 'Table1';
+const API_PROXY_URL = 'https://reliable-liger-0b6308.netlify.app/.netlify/functions/seatable-proxy';
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
