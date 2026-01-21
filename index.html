@@ -152,6 +152,10 @@
             color: #666;
             font-size: 14px;
         }
+
+        #seatable-iframe {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -219,26 +223,15 @@
         </div>
     </div>
 
-    <script>
-        const SEATABLE_API_TOKEN = 'e419c687281a272dc77d8467a4d11b4db24eb9bf';
-        const SEATABLE_SERVER_URL = 'https://cloud.seatable.io';
-        const BASE_UUID = '070b5738-b3fd-4306-a72c-065134dd6fae';
-        const TABLE_NAME = 'Table1';
+    <!-- Versteckter iFrame für SeaTable Webform -->
+    <iframe id="seatable-iframe" name="seatable-iframe"></iframe>
 
+    <script>
         const form = document.getElementById('anmeldeForm');
         const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
-
-        async function getAccessToken() {
-            const response = await fetch(`${SEATABLE_SERVER_URL}/api/v2.1/dtable/app-access-token/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${SEATABLE_API_TOKEN}`
-                }
-            });
-            const data = await response.json();
-            return data.access_token;
-        }
+        
+        const SEATABLE_FORM_URL = 'https://cloud.seatable.io/dtable/forms/9f5738b1-6884-4d3f-9c7b-1a94b46fb300/';
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -251,43 +244,38 @@
             messageDiv.style.display = 'none';
 
             try {
-                const accessToken = await getAccessToken();
+                // Erstelle ein unsichtbares Formular das an SeaTable sendet
+                const hiddenForm = document.createElement('form');
+                hiddenForm.method = 'POST';
+                hiddenForm.action = SEATABLE_FORM_URL;
+                hiddenForm.target = 'seatable-iframe';
 
-                const now = new Date();
-                const timestamp = now.toLocaleString('de-DE', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
+                // Füge die Felder hinzu
+                const nameField = document.createElement('input');
+                nameField.type = 'hidden';
+                nameField.name = 'Name';
+                nameField.value = name;
+                hiddenForm.appendChild(nameField);
 
-                const response = await fetch(`${SEATABLE_SERVER_URL}/dtable-server/api/v1/dtables/${BASE_UUID}/rows/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        table_name: TABLE_NAME,
-                        row: {
-                            'Zeitstempel': timestamp,
-                            'Name': name,
-                            'E-Mail': email
-                        }
-                    })
-                });
+                const emailField = document.createElement('input');
+                emailField.type = 'hidden';
+                emailField.name = 'E-Mail';
+                emailField.value = email;
+                hiddenForm.appendChild(emailField);
 
-                if (response.ok) {
-                    showMessage('Vielen Dank! Ihre Anmeldung wurde erfolgreich übermittelt.', 'success');
-                    form.reset();
-                } else {
-                    const errorText = await response.text();
-                    console.error('SeaTable Fehler:', response.status, errorText);
-                    throw new Error('Fehler beim Senden');
-                }
+                // Füge Formular zum Body hinzu und sende es
+                document.body.appendChild(hiddenForm);
+                hiddenForm.submit();
+                
+                // Entferne das Formular wieder
+                setTimeout(() => {
+                    document.body.removeChild(hiddenForm);
+                }, 1000);
+
+                // Zeige Erfolgsmeldung
+                showMessage('Vielen Dank! Ihre Anmeldung wurde erfolgreich übermittelt.', 'success');
+                form.reset();
+
             } catch (error) {
                 console.error('Fehler:', error);
                 showMessage('Es gab ein Problem bei der Übertragung. Bitte versuchen Sie es später erneut.', 'error');
