@@ -229,15 +229,12 @@
     </div>
 
     <script>
-        // SeaTable Konfiguration
-        const SEATABLE_API_TOKEN = 'e419c687281a272dc77d8467a4d11b4db24eb9bf';
-        const SEATABLE_SERVER_URL = 'https://cloud.seatable.io';
-        const BASE_UUID = '070b5738-b3fd-4306-a72c-065134dd6fae';
-        const TABLE_NAME = 'Table1';
-
         const form = document.getElementById('anmeldeForm');
         const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
+
+        // WICHTIG: Hier musst du deine Google Apps Script URL einfügen
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygfQxnJDnLGwBXSYLRsm3dPQQl35pel7HRlfoQbnYkL3vNcPU8dk39K0LV16DttrHTsA/exec';
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -245,50 +242,28 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
 
+            // Button deaktivieren während der Übertragung
             submitBtn.disabled = true;
             submitBtn.textContent = 'Wird gesendet...';
             messageDiv.style.display = 'none';
 
             try {
-                // Erstelle Zeitstempel im deutschen Format
-                const now = new Date();
-                const timestamp = now.toLocaleString('de-DE', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('email', email);
 
-                // Sende Daten an SeaTable
-                const response = await fetch(`${SEATABLE_SERVER_URL}/dtable-server/api/v1/dtables/${BASE_UUID}/rows/`, {
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${SEATABLE_API_TOKEN}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        table_name: TABLE_NAME,
-                        row: {
-                            'Zeitstempel': timestamp,
-                            'Name': name,
-                            'E-Mail': email
-                        }
-                    })
+                    body: formData
                 });
 
                 if (response.ok) {
                     showMessage('Vielen Dank! Ihre Anmeldung wurde erfolgreich übermittelt.', 'success');
                     form.reset();
                 } else {
-                    const errorData = await response.json();
-                    console.error('SeaTable Fehler:', errorData);
                     throw new Error('Fehler beim Senden');
                 }
             } catch (error) {
-                console.error('Fehler:', error);
                 showMessage('Es gab ein Problem bei der Übertragung. Bitte versuchen Sie es später erneut.', 'error');
             } finally {
                 submitBtn.disabled = false;
