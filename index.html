@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Schützenverein Hustedt - Anmeldung</title>
 <style>
-/* -------------------- Styles -------------------- */
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:linear-gradient(135deg,#1b5e20 0%,#2e7d32 100%); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
 .container { background:white; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.2); max-width:500px; width:100%; padding:40px; }
@@ -82,7 +81,7 @@ const form = document.getElementById('anmeldeForm');
 const submitBtn = document.getElementById('submitBtn');
 const messageDiv = document.getElementById('message');
 
-// ✅ Hier deine Netlify Function URL einsetzen
+// Netlify Function URL
 const API_PROXY_URL = 'https://reliable-liger-0b6308.netlify.app/.netlify/functions/seatable-proxy';
 
 form.addEventListener('submit', async (e) => {
@@ -125,9 +124,7 @@ function showMessage(text, type) {
   messageDiv.style.display = 'block';
 
   if (type === 'success') {
-    setTimeout(() => {
-      messageDiv.style.display = 'none';
-    }, 5000);
+    setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
   }
 }
 </script>
