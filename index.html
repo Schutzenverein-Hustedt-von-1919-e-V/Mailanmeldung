@@ -114,6 +114,47 @@
             border: 1px solid #f5c6cb;
         }
 
+        .checkbox-group {
+            margin-bottom: 25px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin-top: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checkbox-container label {
+            margin-bottom: 0;
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .checkbox-container a {
+            color: #1b5e20;
+            text-decoration: underline;
+        }
+
+        .checkbox-container a:hover {
+            color: #2e7d32;
+        }
+
+        .required-note {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
         .footer {
             text-align: center;
             margin-top: 30px;
@@ -129,7 +170,13 @@
             <p>von 1919 e.V.</p>
         </div>
 
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            📧 Dieses Formular ist ausschließlich für Mitglieder des Schützenvereins Hustedt gedacht.
+        </p>
+
         <form id="anmeldeForm">
+            <p class="required-note">* Pflichtfelder</p>
+            
             <div class="form-group">
                 <label for="name">Name *</label>
                 <input 
@@ -152,6 +199,20 @@
                 >
             </div>
 
+            <div class="checkbox-group">
+                <div class="checkbox-container">
+                    <input 
+                        type="checkbox" 
+                        id="consent" 
+                        name="consent" 
+                        required
+                    >
+                    <label for="consent">
+                        Hiermit willige ich ein, dass meine Kontaktdaten (Name und E-Mail-Adresse) vom Schützenverein Hustedt von 1919 e.V. für Einladungen zu Veranstaltungen und vereinsinterne Kommunikation genutzt werden. Die Daten werden auf Servern von SeaTable (Deutschland) gespeichert. Mir sind meine Rechte gemäß Vereinssatzung bekannt (Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit, Widerspruch und Beschwerde gemäß Art. 15-21 DS-GVO). Ich kann diese Einwilligung jederzeit widerrufen. *
+                    </label>
+                </div>
+            </div>
+
             <button type="submit" class="submit-btn" id="submitBtn">
                 Anmelden
             </button>
@@ -161,6 +222,9 @@
 
         <div class="footer">
             <p>Schützenverein Hustedt von 1919 e.V.</p>
+            <p style="font-size: 12px; margin-top: 10px;">
+                Für Fragen zum Datenschutz oder zum Widerruf Ihrer Einwilligung wenden Sie sich bitte an den Vorstand.
+            </p>
         </div>
     </div>
 
@@ -219,7 +283,5 @@
             }
         }
     </script>
-</body>
-</html>
 </body>
 </html>
