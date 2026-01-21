@@ -49,11 +49,11 @@ exports.handler = async function (event) {
       }
     );
 
-    const data = await response.text();
+    const data = await response.json();
 
     if (!response.ok) {
       console.error("SeaTable error:", data);
-      throw new Error(data);
+      throw new Error(JSON.stringify(data));
     }
 
     return {
