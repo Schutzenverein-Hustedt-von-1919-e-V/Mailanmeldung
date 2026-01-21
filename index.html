@@ -5,32 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Schützenverein Hustedt - Anmeldung</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
-    min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px;
-  }
-  .container { background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-width: 500px; width: 100%; padding: 40px; }
-  .header { text-align: center; margin-bottom: 30px; }
-  .header h1 { color: #1b5e20; font-size: 28px; margin-bottom: 10px; }
-  .header p { color: #666; font-size: 16px; }
-  .form-group { margin-bottom: 25px; }
-  label { display: block; color: #333; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-  input { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 16px; transition: border-color 0.3s; }
-  input:focus { outline: none; border-color: #2e7d32; }
-  .submit-btn { width: 100%; padding: 14px; background: #1b5e20; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
-  .submit-btn:hover { background: #2e7d32; }
-  .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
-  .message { padding: 15px; border-radius: 6px; margin-top: 20px; text-align: center; display: none; }
-  .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-  .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-  .checkbox-group { margin-bottom: 25px; }
-  .checkbox-container { display: flex; align-items: flex-start; gap: 10px; }
-  .checkbox-container input[type="checkbox"] { width: auto; margin-top: 4px; cursor: pointer; flex-shrink: 0; }
-  .checkbox-container label { margin-bottom: 0; font-weight: 400; font-size: 13px; line-height: 1.5; cursor: pointer; }
-  .required-note { color: #666; font-size: 12px; margin-bottom: 20px; font-style: italic; }
-  .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+/* -------------------- Styles -------------------- */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:linear-gradient(135deg,#1b5e20 0%,#2e7d32 100%); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
+.container { background:white; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.2); max-width:500px; width:100%; padding:40px; }
+.header { text-align:center; margin-bottom:30px; }
+.header h1 { color:#1b5e20; font-size:28px; margin-bottom:10px; }
+.header p { color:#666; font-size:16px; }
+.form-group { margin-bottom:25px; }
+label { display:block; color:#333; font-weight:600; margin-bottom:8px; font-size:14px; }
+input { width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:6px; font-size:16px; transition:border-color 0.3s; }
+input:focus { outline:none; border-color:#2e7d32; }
+.submit-btn { width:100%; padding:14px; background:#1b5e20; color:white; border:none; border-radius:6px; font-size:16px; font-weight:600; cursor:pointer; transition:background 0.3s; }
+.submit-btn:hover { background:#2e7d32; }
+.submit-btn:disabled { background:#ccc; cursor:not-allowed; }
+.message { padding:15px; border-radius:6px; margin-top:20px; text-align:center; display:none; }
+.message.success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+.message.error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+.checkbox-group { margin-bottom:25px; }
+.checkbox-container { display:flex; align-items:flex-start; gap:10px; }
+.checkbox-container input[type="checkbox"] { width:auto; margin-top:4px; cursor:pointer; flex-shrink:0; }
+.checkbox-container label { margin-bottom:0; font-weight:400; font-size:13px; line-height:1.5; cursor:pointer; }
+.required-note { color:#666; font-size:12px; margin-bottom:20px; font-style:italic; }
+.footer { text-align:center; margin-top:30px; color:#666; font-size:14px; }
 </style>
 </head>
 <body>
@@ -62,7 +59,7 @@
       <div class="checkbox-container">
         <input type="checkbox" id="consent" name="consent" required>
         <label for="consent">
-          Hiermit willige ich ein, dass meine Kontaktdaten (Name und E-Mail-Adresse) vom Schützenverein Hustedt für Einladungen zu Veranstaltungen und vereinsinterne Kommunikation genutzt werden. Die Daten werden auf Servern von SeaTable gespeichert. Mir sind meine Rechte gemäß Art. 15-21 DS-GVO bekannt. Ich kann diese Einwilligung jederzeit widerrufen. *
+          Hiermit willige ich ein, dass meine Kontaktdaten vom Schützenverein Hustedt für Einladungen zu Veranstaltungen und interne Kommunikation genutzt werden. *
         </label>
       </div>
     </div>
@@ -85,6 +82,7 @@ const form = document.getElementById('anmeldeForm');
 const submitBtn = document.getElementById('submitBtn');
 const messageDiv = document.getElementById('message');
 
+// ✅ Hier deine Netlify Function URL einsetzen
 const API_PROXY_URL = 'https://reliable-liger-0b6308.netlify.app/.netlify/functions/seatable-proxy';
 
 form.addEventListener('submit', async (e) => {
@@ -98,27 +96,22 @@ form.addEventListener('submit', async (e) => {
   messageDiv.style.display = 'none';
 
   try {
-    const payload = {
-      table_name_or_id: TABLE_NAME,
-      rows: [{ "Name": name, "E-Mail": email }]
-    };
-
-    const response = await fetch(SEATABLE_API_URL, {
+    const res = await fetch(API_PROXY_URL, {
       method: 'POST',
-      headers: {
-        'Authorization': `Token ${SEATABLE_API_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email })
     });
 
-    if (!response.ok) throw new Error('Fehler beim Senden');
+    const data = await res.json();
+    if (res.ok) {
+      showMessage('Vielen Dank! Ihre Anmeldung wurde erfolgreich übermittelt.', 'success');
+      form.reset();
+    } else {
+      throw new Error(data.error || 'Fehler beim Senden');
+    }
 
-    showMessage('Vielen Dank! Ihre Anmeldung wurde erfolgreich übermittelt.', 'success');
-    form.reset();
-
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     showMessage('Es gab ein Problem bei der Übertragung. Bitte versuchen Sie es später erneut.', 'error');
   } finally {
     submitBtn.disabled = false;
@@ -138,6 +131,5 @@ function showMessage(text, type) {
   }
 }
 </script>
-
 </body>
 </html>
