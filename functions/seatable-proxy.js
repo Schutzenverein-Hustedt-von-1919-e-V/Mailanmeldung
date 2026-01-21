@@ -30,7 +30,7 @@ exports.handler = async function (event) {
     const TOKEN = process.env.SEATABLE_API_TOKEN;
 
     const response = await fetch(
-      `https://cloud.seatable.io/api-gateway/api/v2/dtables/${BASE_UUID}/rows/`,
+      `https://cloud.seatable.io/api-gateway/api/v2.1/dtables/${BASE_UUID}/rows/`,
       {
         method: "POST",
         headers: {
@@ -49,11 +49,11 @@ exports.handler = async function (event) {
       }
     );
 
-    const data = await response.json();
+    const data = await response.text();
 
     if (!response.ok) {
       console.error("SeaTable error:", data);
-      throw new Error(JSON.stringify(data));
+      throw new Error(data);
     }
 
     return {
@@ -67,7 +67,10 @@ exports.handler = async function (event) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: "Server error", details: err.message })
+      body: JSON.stringify({
+        error: "Server error",
+        details: err.message
+      })
     };
   }
 };
