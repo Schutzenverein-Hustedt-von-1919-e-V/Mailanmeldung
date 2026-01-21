@@ -10,13 +10,8 @@ exports.handler = async function (event) {
     "Content-Type": "application/json"
   };
 
-  // Preflight (CORS!)
   if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ ok: true })
-    };
+    return { statusCode: 200, headers, body: "{}" };
   }
 
   if (event.httpMethod !== "POST") {
@@ -35,7 +30,7 @@ exports.handler = async function (event) {
     const TOKEN = process.env.SEATABLE_API_TOKEN;
 
     const response = await fetch(
-      `https://cloud.seatable.io/api/v2.1/dtables/${BASE_UUID}/rows/`,
+      `https://cloud.seatable.io/api-gateway/api/v2/dtables/${BASE_UUID}/rows/`,
       {
         method: "POST",
         headers: {
@@ -45,7 +40,10 @@ exports.handler = async function (event) {
         body: JSON.stringify({
           table_name: TABLE_NAME,
           rows: [
-            { Name: name, "E-Mail": email }
+            {
+              "Name": name,
+              "E-Mail": email
+            }
           ]
         })
       }
@@ -55,7 +53,7 @@ exports.handler = async function (event) {
 
     if (!response.ok) {
       console.error("SeaTable error:", data);
-      throw new Error("SeaTable API error");
+      throw new Error(JSON.stringify(data));
     }
 
     return {
@@ -69,7 +67,7 @@ exports.handler = async function (event) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: "Server error" })
+      body: JSON.stringify({ error: "Server error", details: err.message })
     };
   }
 };
