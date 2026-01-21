@@ -1,6 +1,8 @@
-export async function handler(event) {
+const fetch = (...args) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-  // ===== CORS HEADERS (KRITISCH!) =====
+exports.handler = async function (event) {
+
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
@@ -8,7 +10,7 @@ export async function handler(event) {
     "Content-Type": "application/json"
   };
 
-  // Preflight Request beantworten
+  // Preflight (CORS!)
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
@@ -28,21 +30,23 @@ export async function handler(event) {
   try {
     const { name, email } = JSON.parse(event.body);
 
-    const SEATABLE_API_TOKEN = process.env.SEATABLE_API_TOKEN;
     const BASE_UUID = "070b5738-b3fd-4306-a72c-065134dd6fae";
     const TABLE_NAME = "Table1";
+    const TOKEN = process.env.SEATABLE_API_TOKEN;
 
     const response = await fetch(
       `https://cloud.seatable.io/api/v2.1/dtables/${BASE_UUID}/rows/`,
       {
         method: "POST",
         headers: {
-          "Authorization": `Token ${SEATABLE_API_TOKEN}`,
+          "Authorization": `Token ${TOKEN}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           table_name: TABLE_NAME,
-          rows: [{ Name: name, "E-Mail": email }]
+          rows: [
+            { Name: name, "E-Mail": email }
+          ]
         })
       }
     );
@@ -68,4 +72,4 @@ export async function handler(event) {
       body: JSON.stringify({ error: "Server error" })
     };
   }
-}
+};
