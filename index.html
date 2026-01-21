@@ -139,15 +139,6 @@
             cursor: pointer;
         }
 
-        .checkbox-container a {
-            color: #1b5e20;
-            text-decoration: underline;
-        }
-
-        .checkbox-container a:hover {
-            color: #2e7d32;
-        }
-
         .required-note {
             color: #666;
             font-size: 12px;
@@ -229,12 +220,25 @@
     </div>
 
     <script>
+        const SEATABLE_API_TOKEN = 'e419c687281a272dc77d8467a4d11b4db24eb9bf';
+        const SEATABLE_SERVER_URL = 'https://cloud.seatable.io';
+        const BASE_UUID = '070b5738-b3fd-4306-a72c-065134dd6fae';
+        const TABLE_NAME = 'Table1';
+
         const form = document.getElementById('anmeldeForm');
         const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
 
-        // WICHTIG: Hier musst du deine Google Apps Script URL einfügen
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygfQxnJDnLGwBXSYLRsm3dPQQl35pel7HRlfoQbnYkL3vNcPU8dk39K0LV16DttrHTsA/exec';
+        async function getAccessToken() {
+            const response = await fetch(`${SEATABLE_SERVER_URL}/api/v2.1/dtable/app-access-token/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${SEATABLE_API_TOKEN}`
+                }
+            });
+            const data = await response.json();
+            return data.access_token;
+        }
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -242,28 +246,50 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
 
-            // Button deaktivieren während der Übertragung
             submitBtn.disabled = true;
             submitBtn.textContent = 'Wird gesendet...';
             messageDiv.style.display = 'none';
 
             try {
-                const formData = new FormData();
-                formData.append('name', name);
-                formData.append('email', email);
+                const accessToken = await getAccessToken();
 
-                const response = await fetch(SCRIPT_URL, {
+                const now = new Date();
+                const timestamp = now.toLocaleString('de-DE', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+
+                const response = await fetch(`${SEATABLE_SERVER_URL}/dtable-server/api/v1/dtables/${BASE_UUID}/rows/`, {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        table_name: TABLE_NAME,
+                        row: {
+                            'Zeitstempel': timestamp,
+                            'Name': name,
+                            'E-Mail': email
+                        }
+                    })
                 });
 
                 if (response.ok) {
                     showMessage('Vielen Dank! Ihre Anmeldung wurde erfolgreich übermittelt.', 'success');
                     form.reset();
                 } else {
+                    const errorText = await response.text();
+                    console.error('SeaTable Fehler:', response.status, errorText);
                     throw new Error('Fehler beim Senden');
                 }
             } catch (error) {
+                console.error('Fehler:', error);
                 showMessage('Es gab ein Problem bei der Übertragung. Bitte versuchen Sie es später erneut.', 'error');
             } finally {
                 submitBtn.disabled = false;
