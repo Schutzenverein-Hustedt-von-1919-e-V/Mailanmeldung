@@ -1,53 +1,71 @@
-const fetch = require('node-fetch');
+export async function handler(event) {
 
-exports.handler = async function(event, context) {
-  // CORS Headers
+  // ===== CORS HEADERS (KRITISCH!) =====
   const headers = {
-    "Access-Control-Allow-Origin": "*", // oder GitHub Pages URL z. B. "https://schutzenverein-hustedt-von-1919-e-v.github.io"
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS"
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json"
   };
 
-  // Preflight request abfangen
+  // Preflight Request beantworten
   if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers };
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ ok: true })
+    };
   }
 
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed', headers };
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: "Method not allowed" })
+    };
   }
 
   try {
     const { name, email } = JSON.parse(event.body);
 
-    const SEATABLE_API_URL = 'https://cloud.seatable.io/api/v2.1/workspaces/97343/dtables/070b5738-b3fd-4306-a72c-065134dd6fae/rows/';
     const SEATABLE_API_TOKEN = process.env.SEATABLE_API_TOKEN;
-    const TABLE_NAME = 'Table1';
+    const BASE_UUID = "070b5738-b3fd-4306-a72c-065134dd6fae";
+    const TABLE_NAME = "Table1";
 
-    const payload = {
-      table_name_or_id: TABLE_NAME,
-      rows: [
-        { "Name": name, "E-Mail": email }
-      ]
-    };
+    const response = await fetch(
+      `https://cloud.seatable.io/api/v2.1/dtables/${BASE_UUID}/rows/`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Token ${SEATABLE_API_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          table_name: TABLE_NAME,
+          rows: [{ Name: name, "E-Mail": email }]
+        })
+      }
+    );
 
-    const response = await fetch(SEATABLE_API_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Token ${SEATABLE_API_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+    const data = await response.json();
 
     if (!response.ok) {
-      const errText = await response.text();
-      return { statusCode: response.status, body: JSON.stringify({ error: errText }), headers };
+      console.error("SeaTable error:", data);
+      throw new Error("SeaTable API error");
     }
 
-    return { statusCode: 200, body: JSON.stringify({ success: true }), headers };
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ success: true })
+    };
 
   } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }), headers };
+    console.error("Function error:", err);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: "Server error" })
+    };
   }
-};
+}
