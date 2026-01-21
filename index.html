@@ -102,7 +102,7 @@ form.addEventListener('submit', async (e) => {
     });
 
     const data = await res.json();
-    if (res.ok) {
+    if (res.ok && data.success) {
       showMessage('Vielen Dank! Ihre Anmeldung wurde erfolgreich übermittelt.', 'success');
       form.reset();
     } else {
