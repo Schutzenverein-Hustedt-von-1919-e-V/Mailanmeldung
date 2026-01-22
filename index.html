@@ -2,106 +2,81 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schützenverein Hustedt – Anmeldung</title>
+  <title>Mailanmeldung – Schützenverein Hustedt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
-      min-height: 100vh;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f5;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      min-height: 100vh;
     }
 
-    .container {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      max-width: 520px;
-      width: 100%;
-      padding: 40px;
-    }
-
-    .header {
+    .box {
+      background: #fff;
+      max-width: 500px;
+      padding: 35px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
       text-align: center;
-      margin-bottom: 30px;
     }
 
-    .header h1 {
+    h1 {
       color: #1b5e20;
-      font-size: 28px;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
 
-    .header p {
-      color: #666;
-      font-size: 16px;
+    p {
+      color: #444;
+      line-height: 1.6;
     }
 
-    .intro {
-      text-align: center;
-      color: #555;
-      font-size: 15px;
-      margin-bottom: 25px;
-    }
-
-    .iframe-wrapper {
-      width: 100%;
+    a.button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 15px 28px;
+      background: #1b5e20;
+      color: #fff;
+      text-decoration: none;
       border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #e0e0e0;
+      font-size: 16px;
+      font-weight: bold;
     }
 
-    iframe {
-      width: 100%;
-      height: 650px;
-      border: none;
+    a.button:hover {
+      background: #2e7d32;
     }
 
-    .footer {
-      text-align: center;
-      margin-top: 30px;
-      color: #666;
+    .ds {
+      margin-top: 20px;
       font-size: 13px;
-      line-height: 1.5;
+      color: #666;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Schützenverein Hustedt</h1>
-      <p>von 1919 e.V.</p>
-    </div>
+  <div class="box">
+    <h1>Schützenverein Hustedt</h1>
 
-    <p class="intro">
-      📧 Anmeldung für Vereinsinformationen und Einladungen.<br>
-      Dieses Formular ist ausschließlich für Vereinsmitglieder.
+    <p>
+      Anmeldung für Vereinsinformationen und Einladungen.<br>
+      Bitte tragen Sie Ihren Namen und Ihre E-Mail-Adresse ein.
     </p>
 
-    <div class="iframe-wrapper">
-      <iframe
-        src="https://cloud.seatable.io/dtable/form-edit/6d026ad1-a6bb-42db-85b9-6f8088dc4d23/"
-        loading="lazy">
-      </iframe>
-    </div>
+    <a class="button"
+       href="https://cloud.seatable.io/dtable/form-edit/6d026ad1-a6bb-42db-85b9-6f8088dc4d23/"
+       target="_blank" rel="noopener">
+       Zum Anmeldeformular
+    </a>
 
-    <div class="footer">
-      <p>Schützenverein Hustedt von 1919 e.V.</p>
-      <p>
-        Ihre Angaben werden ausschließlich für vereinsinterne Kommunikation genutzt.
-        Der Zeitstempel wird automatisch gespeichert.
-      </p>
+    <div class="ds">
+      Der Zeitstempel wird automatisch gespeichert.<br>
+      Die Daten werden ausschließlich für vereinsinterne Zwecke verwendet.
     </div>
   </div>
 </body>
